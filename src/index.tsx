@@ -8,13 +8,25 @@ import {
 } from "recoil";
 
 import * as serviceWorker from "./serviceWorker";
+import { ConfigProvider } from "antd";
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <RecoilRoot>
-      <App />
-    </RecoilRoot>
+    <ConfigProvider
+      theme={{
+        // algorithm: theme.compactAlgorithm,
+        token: {
+          colorPrimary: '#D0FFDB',
+          colorText: "#000000",
+          colorTextLightSolid: "#8e7456"
+        },
+      }}
+    >
+      <RecoilRoot>
+        <App />
+      </RecoilRoot>
+    </ConfigProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

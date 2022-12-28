@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useMemo } from "react";
-import { Layout, Menu, Breadcrumb } from "antd";
+import { Layout, Menu } from "antd";
 import PopOver from "@/components/PopOver";
 import Account from "@/components/Account";
 import { useIntl } from "react-intl";
@@ -10,13 +10,17 @@ import { useRecoilValue } from "recoil";
 import { Link, useLocation } from "react-router-dom";
 import { assignRouteArrayProps, isEmpty } from "@/utils";
 import { UserOutlined } from '@ant-design/icons';
+import background from './imgs/background.png'
 
-const { Header, Content } = Layout;
+const { Header } = Layout;
 
-interface IDefaultLayoutProps {}
+interface IDefaultLayoutProps {
+  style?: any
+}
 
 const defaultStyle = {
   height: "100%",
+  background: '#FFF0DA',
 };
 
 const menuStyle = {
@@ -52,7 +56,8 @@ const defaultMenus: any[] = Object.keys(routerMeta).reduce((prev: any[], compone
 }, [])
 
 const DefaultLayout: FunctionComponent<IDefaultLayoutProps> = (props) => {
-  const { children } = props;
+  const { children, style = {} } = props;
+  console.log('style', style)
   const { formatMessage: fm } = useIntl();
   const location = useLocation();
   const account = useRecoilValue(accountState)
@@ -76,13 +81,6 @@ const DefaultLayout: FunctionComponent<IDefaultLayoutProps> = (props) => {
 
   useEffect(() => {
     console.log('pathname', location.pathname)
-  }, [location])
-
-  const pathDom = useMemo(() => {
-    const { pathname } = location
-    const pathArray = pathname.split('/')
-    const emptyToSpace = (text: string) => text === '' ? ' ' : text
-    return pathArray.map(path => <Breadcrumb.Item key={path}>{emptyToSpace(path)}</Breadcrumb.Item>)
   }, [location])
 
   return (
@@ -112,22 +110,10 @@ const DefaultLayout: FunctionComponent<IDefaultLayoutProps> = (props) => {
           </div>
         </Menu>
       </Header>
-      <Layout>
-        <Layout style={{ padding: "0 24px 24px" }}>
-          <Breadcrumb style={{ margin: "16px 0" }}>
-            {pathDom}
-          </Breadcrumb>
-          <Content
-            className="site-layout-background"
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 280,
-            }}
-          >
-            {children}
-          </Content>
-        </Layout>
+      <Layout style={{ backgroundColor: "#FFF0DA", backgroundImage: `url(${background})`, height: '100%', backgroundRepeat: 'no-repeat', backgroundPosition: 'bottom', backgroundSize: 'contain' }}>
+        <div style={{ padding: "10px 20px", height: '100%', ...style }}>
+          {children}
+        </div>
       </Layout>
     </Layout>
   );

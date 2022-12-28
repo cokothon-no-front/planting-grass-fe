@@ -14,11 +14,14 @@ import { BoardPageWrapper } from './BoardPageStyles';
 import { ActionState } from './reducer/BoardReducer';
 
 interface IBoardPageProps {
-  prefix?: string
+  title?: string,
+  prefix?: string,
+  createText?: string,
+  assignTitle?: (item: any) => any
 }
 
 const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
-  const { prefix } = props
+  const { title = "게시판", prefix, createText = "글쓰기", assignTitle } = props
 
   const assignPrefix = useMemo<string>(() => {
     if (prefix !== undefined) {
@@ -33,6 +36,10 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
   const { state, dispatch } = useContext(BoardContext);
 
   const { page = 1, boardList = [], total = 10 } = state;
+  useEffect(() => {
+    console.log('boardList', boardList)
+  }, [boardList])
+  
 
   const account = useRecoilValue(accountState);
 
@@ -46,8 +53,6 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
         sort: "createdDate,desc",
       })
       .then(({ total, data }: PageableData<UserSave>) => {
-        console.log("total", total);
-        console.log("data", data);
         dispatch({
           type: ActionState.SET,
           value: {
@@ -81,7 +86,7 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
       <List
         header={
           <FlexCenter>
-            <b>태스크</b>
+            <b>{title}</b>
             <div style={{ marginLeft: "auto" }}>
               {!isEmpty(account) && (
                 <Button
@@ -89,7 +94,7 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
                   onClick={() => navigate(`/${pathPrefix}/create`)}
                   icon={<EditOutlined />}
                 >
-                  글쓰기
+                  {createText}
                 </Button>
               )}
             </div>
@@ -102,7 +107,9 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
           const { id, dataKey, data, userId } = item;
           return (
             <List.Item key={id} onClick={() => navigate(`/${pathPrefix}/${id}`)}>
-              [{dataKey}] {data} [작성자: {userId}]
+              <FlexCenter>
+                {assignTitle !== undefined ? assignTitle(item) : `[${dataKey}] ${data} [작성자: ${userId}]`}
+              </FlexCenter>
             </List.Item>
           );
         }}

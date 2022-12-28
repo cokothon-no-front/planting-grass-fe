@@ -11,6 +11,7 @@ import { Link, useLocation } from "react-router-dom";
 import { assignRouteArrayProps, isEmpty } from "@/utils";
 import { UserOutlined } from '@ant-design/icons';
 import background from './imgs/background.png'
+import Title from "@/components/Title";
 
 const { Header } = Layout;
 
@@ -21,6 +22,8 @@ interface IDefaultLayoutProps {
 const defaultStyle = {
   height: "100%",
   background: '#FFF0DA',
+  display: 'flex',
+  flexDirection: 'column'
 };
 
 const menuStyle = {
@@ -57,7 +60,6 @@ const defaultMenus: any[] = Object.keys(routerMeta).reduce((prev: any[], compone
 
 const DefaultLayout: FunctionComponent<IDefaultLayoutProps> = (props) => {
   const { children, style = {} } = props;
-  console.log('style', style)
   const { formatMessage: fm } = useIntl();
   const location = useLocation();
   const account = useRecoilValue(accountState)
@@ -84,7 +86,7 @@ const DefaultLayout: FunctionComponent<IDefaultLayoutProps> = (props) => {
   }, [location])
 
   return (
-    <Layout style={defaultStyle}>
+    <Layout style={defaultStyle as any}>
       <Header className="header" style={{ display: "flex" }}>
         <div className="logo" style={{
           color: "white", width: 100, cursor: 'pointer'
@@ -112,6 +114,7 @@ const DefaultLayout: FunctionComponent<IDefaultLayoutProps> = (props) => {
       </Header>
       <Layout style={{ backgroundColor: "#FFF0DA", backgroundImage: `url(${background})`, height: '100%', backgroundRepeat: 'no-repeat', backgroundPosition: 'bottom', backgroundSize: 'contain' }}>
         <div style={{ padding: "10px 20px", height: '100%', ...style }}>
+          <Title style={{ marginTop: 50, marginBottom: 40 }} />
           {children}
         </div>
       </Layout>

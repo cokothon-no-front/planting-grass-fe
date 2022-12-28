@@ -8,7 +8,11 @@ interface IBoardDetailPageProps {
 const TaskDetail: FunctionComponent<IBoardDetailPageProps> = (props) => {  
   return (
     <DefaultLayout>
-      <DetailBoard prefix={"task"} />
+      <DetailBoard
+        prefix={"task"}
+        assignTitle={(title?: string) => ((title && JSON.parse(title))?.title || "") as any}
+        hideComment={true}
+      />
     </DefaultLayout>
   );
 };

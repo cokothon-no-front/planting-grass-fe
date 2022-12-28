@@ -6,6 +6,10 @@ import { useNavigate } from "react-router";
 
 interface ICreateBoardProps {
   prefix?: string;
+  title?: string;
+  contentsText?: string;
+  alwaysPrivate?: boolean;
+  assignTitle?: (data: string) => any
 }
 
 const offset: any = 4
@@ -15,7 +19,7 @@ const layout = {
 };
 
 const CreateBoard: FunctionComponent<ICreateBoardProps> = (props) => {
-  const { prefix } = props;
+  const { prefix, title = "제목", contentsText = "컨텐츠", alwaysPrivate = false, assignTitle } = props;
   const navigate = useNavigate()
   const assignPrefix = useMemo<string>(() => {
     if (prefix !== undefined) {
@@ -34,23 +38,23 @@ const CreateBoard: FunctionComponent<ICreateBoardProps> = (props) => {
     const { title, contents, private: isPrivate } = values
     userSave.addUserSave({
       dataKey: `${assignPrefix}title`,
-      data: title,
-      private: isPrivate
+      data: assignTitle !== undefined ? assignTitle(title) : title,
+      private: alwaysPrivate || isPrivate
     }).then((data: UserSave) => {
       console.log('title data', data)
       const { id } = data
       return userSave.addUserSave({
         dataKey: `${assignPrefix}board:${id}:contents`,
         data: contents,
-        private: isPrivate
+        private: alwaysPrivate || isPrivate
       })
     }).then((data: UserSave) => {
       console.log('contents data', data)
       const { id } = data
-      message.success("게시글이 성공적으로 작성되었습니다.")
+      message.success("성공적으로 추가되었습니다.")
       navigate(-1)
     })
-  }, [assignPrefix, navigate])
+  }, [alwaysPrivate, assignPrefix, assignTitle, navigate])
 
   return (
     <Form
@@ -58,15 +62,15 @@ const CreateBoard: FunctionComponent<ICreateBoardProps> = (props) => {
       name="nest-messages"
       onFinish={onFinish}
     >
-      <Form.Item name={"title"} label="제목" rules={[{ required: true }]}>
+      <Form.Item name={"title"} label={title} rules={[{ required: true }]}>
         <Input />
       </Form.Item>
-      <Form.Item wrapperCol={{ ...layout.wrapperCol, offset }}>
+      {alwaysPrivate !== true && <Form.Item wrapperCol={{ ...layout.wrapperCol, offset }}>
         <Form.Item name="private" noStyle valuePropName="checked">
           <Checkbox>비밀글</Checkbox>
         </Form.Item>
-      </Form.Item>
-      <Form.Item name={'contents'} label="컨텐츠">
+      </Form.Item>}
+      <Form.Item name={'contents'} label={contentsText}>
         <Input.TextArea />
       </Form.Item>
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset }}>

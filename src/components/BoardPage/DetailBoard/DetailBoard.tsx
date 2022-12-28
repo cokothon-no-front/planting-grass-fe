@@ -1,24 +1,24 @@
-import React, { FunctionComponent, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from "react";
 import { Card, Modal, Button } from "antd";
 import { userSave } from "@/api";
 import { useNavigate, useParams } from "react-router";
 import { UserSave } from '@gongdongho12/npm-usersave-api/dist/meta';
 import BoardComment from '../BoardComment';
-import BoardContext from "@/contexts/BoardContext";
 import { useRecoilValue } from "recoil";
 import accountState from "@/state/account";
 import { isEmpty } from "@/utils";
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
 interface IDetailBoardProps {
-  prefix?: string
+  prefix?: string,
+  assignTitle?: (title?: string) => any,
+  hideComment?: boolean
 }
 
 const { confirm } = Modal;
 
 const DetailBoard: FunctionComponent<IDetailBoardProps> = (props) => {
-  const { prefix } = props
-  const { state  } = useContext(BoardContext)
+  const { prefix, assignTitle, hideComment = false } = props
 
   const navigate = useNavigate();
   const account = useRecoilValue(accountState)
@@ -97,10 +97,10 @@ const DetailBoard: FunctionComponent<IDetailBoardProps> = (props) => {
         Array.prototype.push.apply(promiseArr, commentPromiseArr)
       }
       Promise.all(promiseArr).then(() => {
-        navigate('/board')
+        navigate(prefix !== undefined ? `/${prefix}` : '/board')
       })
     },
-    [commentList, contentsData?.id, navigate, titleData?.id]
+    [commentList, contentsData?.id, navigate, prefix, titleData?.id]
   )
   
   const refreshAll = useCallback(() => {
@@ -116,7 +116,7 @@ const DetailBoard: FunctionComponent<IDetailBoardProps> = (props) => {
   const showConfirm = useCallback(
     () => {
       confirm({
-        title: '현재 글을 삭제하시겠습니까??',
+        title: '삭제하시겠습니까??',
         icon: <ExclamationCircleOutlined />,
         content: '삭제시 다시 복구할 수 없습니다.',
         onOk() {
@@ -130,17 +130,19 @@ const DetailBoard: FunctionComponent<IDetailBoardProps> = (props) => {
     [deleteBoard],
   )
 
-  const isWriter = useMemo(() => titleData.userId === savedAccount?.email, [savedAccount?.email, titleData.userId])
+  const isWriter = useMemo(() => {
+    return titleData.userId === savedAccount?.email
+  }, [savedAccount?.email, titleData.userId])
 
   return (
     <div>
       <Card
-        title={titleData?.data}
+        title={assignTitle !== undefined ? assignTitle(titleData?.data) : titleData?.data}
         style={{ width: "100%" }}
         extra={isWriter && <Button type="primary" icon={<DeleteOutlined />} danger onClick={showConfirm}>삭제</Button>}>
         {contentsData?.data}
       </Card>
-      <BoardComment query={query} commentList={commentList} refresh={refreshComments} />
+      {!hideComment && <BoardComment query={query} commentList={commentList} refresh={refreshComments} />}
     </div>
   );
 };

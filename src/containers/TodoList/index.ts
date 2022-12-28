@@ -1,2 +1,2 @@
-import Board from './Board'
-export default Board
+import TodoList from './TodoList'
+export default TodoList

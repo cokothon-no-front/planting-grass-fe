@@ -1,19 +1,17 @@
-import CreateBoard from '@/components/BoardPage/CreateBoard';
-import DefaultLayout from '@/components/DefaultLayout';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent } from "react";
+import CreateBoard from "@/components/BoardPage/CreateBoard";
+import DefaultLayout from "@/components/DefaultLayout";
 
-interface ITaskCreateProps {
-}
+interface ITaskCreateProps {}
 
 const TaskCreate: FunctionComponent<ITaskCreateProps> = (props) => {
-  return <div>
+  return (
     <DefaultLayout>
-      태스크 생성
       <div>
-        <CreateBoard prefix={'task'} />
+        <CreateBoard prefix={"task"} title={"태스크명"} contentsText={'상세정보'} alwaysPrivate={true} assignTitle={(title: string) => JSON.stringify({ title, check: false })} />
       </div>
     </DefaultLayout>
-  </div>;
+  );
 };
 
 export default TaskCreate;

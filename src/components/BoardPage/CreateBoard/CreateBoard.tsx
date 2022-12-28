@@ -35,7 +35,7 @@ const CreateBoard: FunctionComponent<ICreateBoardProps> = (props) => {
   };
 
   const addSaveUser = useCallback((values: any) => {
-    const { title, contents, private: isPrivate } = values
+    const { title, contents = "", private: isPrivate } = values
     userSave.addUserSave({
       dataKey: `${assignPrefix}title`,
       data: assignTitle !== undefined ? assignTitle(title) : title,

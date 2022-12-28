@@ -8,11 +8,13 @@ export const BoardPageWrapper: any = styled.div`
     overflow: auto;
     ${(props: any) => `height: ${props.listHeight}px`};
   }
-  & .ant-list-items {
-    & > .ant-list-item {
-      &:hover {
-        background-color: #eeeeee;
+  ${(props: any) => props.clickable === true ? `
+    & .ant-list-items {
+      & > .ant-list-item {
+        &:hover {
+          background-color: #eeeeee;
+        }
       }
     }
-  }
+  ` : ""}
 `

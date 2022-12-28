@@ -34,6 +34,8 @@ const TodoList: FunctionComponent<IBoardPageProps> = (props) => {
           listHeight={366}
           hideCreate={true}
           hideFooter={true}
+          clickable={false}
+          repeat={true}
           style={{ marginLeft: '10px', width: 550 }}
           assignTitle={({ id, dataKey, data, userId, ...rest }: any) => {
             return <div>

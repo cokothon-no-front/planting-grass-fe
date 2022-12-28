@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext, useEffect, useMemo } from 'react';
+import React, { FunctionComponent, useCallback, useContext, useEffect, useMemo } from 'react';
 import { EditOutlined } from '@ant-design/icons';
 import { PageableData, UserSave } from '@gongdongho12/npm-usersave-api/dist/meta';
 import { Button, List, Pagination } from 'antd';
@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import accountState from '@/state/account';
 import isEmpty from '@/utils/isEmpty';
-
+import { useTimer } from 'react-timer-hook';
 import { BoardPageWrapper } from './BoardPageStyles';
 import { ActionState } from './reducer/BoardReducer';
 
@@ -23,10 +23,12 @@ interface IBoardPageProps {
   defaultSize?: number;
   hideCreate?: boolean;
   hideFooter?: boolean;
+  clickable?: boolean;
+  repeat?: boolean;
 }
 
 const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
-  const { title = "게시판", prefix, createText = "글쓰기", assignTitle, defaultSize = 10, hideCreate = false, hideFooter = false, listHeight, style = {} } = props
+  const { title = "게시판", prefix, createText = "글쓰기", assignTitle, defaultSize = 10, hideCreate = false, hideFooter = false, clickable = true, listHeight, style = {}, repeat = false } = props
 
   const assignPrefix = useMemo<string>(() => {
     if (prefix !== undefined) {
@@ -50,11 +52,11 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const refreshList = useCallback((page: number) => {
     userSave
       .getSavePageableQuery(`${assignPrefix}title`, {
         size: defaultSize,
-        page: 0,
+        page: page - 1,
         sort: "createdDate,desc",
       })
       .then(({ total, data }: PageableData<UserSave>) => {
@@ -73,8 +75,25 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
           }
         });
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [assignPrefix]);
+  }, [assignPrefix, defaultSize, dispatch])
+  
+
+  // useEffect(() => {
+  //   refreshList(page)
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [page, refreshList, assignPrefix]);
+
+  
+  useEffect(() => {
+    refreshList(page)
+    if (repeat) {
+      const interval = setInterval(() => {
+        refreshList(page)
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+    return undefined
+  }, [page, refreshList, repeat]);
 
   const updatePage = (page: number) => {
     dispatch({
@@ -87,7 +106,7 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
   };
 
   return (
-    <BoardPageWrapper style={style} listHeight={listHeight}>
+    <BoardPageWrapper style={style} listHeight={listHeight} clickable={clickable}>
       <List
         header={
           <FlexCenter>
@@ -111,7 +130,10 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
         renderItem={(item: any) => {
           const { id, dataKey, data, userId } = item;
           return (
-            <List.Item key={id} onClick={() => navigate(`/${pathPrefix}/${id}`)}>
+            <List.Item
+              key={id}
+              onClick={clickable ? (() => navigate(`/${pathPrefix}/${id}`)) : undefined}
+            >
               <FlexCenter>
                 {assignTitle !== undefined ? assignTitle(item) : `[${dataKey}] ${data} [작성자: ${userId}]`}
               </FlexCenter>

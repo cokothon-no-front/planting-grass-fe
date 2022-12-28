@@ -31,7 +31,7 @@ const TodoCheck: FunctionComponent<ITodoCheckProps> = (props) => {
       .then((res) => {
         console.log('complete', res.data)
         return userSave.addUserSave({
-          dataKey: "log_task",
+          dataKey: "log_title",
           data: `${userId}님이 ${title} 을(를) 완료했습니다!`,
           private: false,
         })
@@ -44,7 +44,7 @@ const TodoCheck: FunctionComponent<ITodoCheckProps> = (props) => {
   return <Checkbox onChange={onChange} onClick={(e) => {
     e.preventDefault()
     e.stopPropagation()
-  }} defaultChecked={check}><span style={checked ? { textDecoration: 'line-through', color: '#cccccc', fontSize: 20 } : { fontSize: 20 }}>{title}</span></Checkbox>;
+  }} defaultChecked={check}><span style={checked ? { textDecoration: 'line-through', color: '#cccccc', fontSize: 14 } : { fontSize: 20 }}>{title}</span></Checkbox>;
 };
 
 export default TodoCheck;

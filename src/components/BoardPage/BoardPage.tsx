@@ -17,11 +17,16 @@ interface IBoardPageProps {
   title?: string,
   prefix?: string,
   createText?: string,
-  assignTitle?: (item: any) => any
+  assignTitle?: (item: any) => any,
+  style?: any;
+  listHeight?: number;
+  defaultSize?: number;
+  hideCreate?: boolean;
+  hideFooter?: boolean;
 }
 
 const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
-  const { title = "게시판", prefix, createText = "글쓰기", assignTitle } = props
+  const { title = "게시판", prefix, createText = "글쓰기", assignTitle, defaultSize = 10, hideCreate = false, hideFooter = false, listHeight, style = {} } = props
 
   const assignPrefix = useMemo<string>(() => {
     if (prefix !== undefined) {
@@ -35,7 +40,7 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
 
   const { state, dispatch } = useContext(BoardContext);
 
-  const { page = 1, boardList = [], total = 10 } = state;
+  const { [`${assignPrefix}page`]: page = 1, [`${assignPrefix}boardList`]: boardList = [], [`${assignPrefix}total`]: total = defaultSize } = state;
   useEffect(() => {
     console.log('boardList', boardList)
   }, [boardList])
@@ -48,7 +53,7 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
   useEffect(() => {
     userSave
       .getSavePageableQuery(`${assignPrefix}title`, {
-        size: 10,
+        size: defaultSize,
         page: 0,
         sort: "createdDate,desc",
       })
@@ -56,14 +61,14 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
         dispatch({
           type: ActionState.SET,
           value: {
-            key: "boardList",
+            key: `${assignPrefix}boardList`,
             data,
           }
         });
         dispatch({
           type: ActionState.SET,
           value: {
-            key: "total",
+            key: `${assignPrefix}total`,
             data: total,
           }
         });
@@ -75,20 +80,20 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
     dispatch({
       type: ActionState.SET,
       value: {
-        key: "page",
+        key: `${assignPrefix}page`,
         data: page,
       }
     });
   };
 
   return (
-    <BoardPageWrapper>
+    <BoardPageWrapper style={style} listHeight={listHeight}>
       <List
         header={
           <FlexCenter>
             <b>{title}</b>
             <div style={{ marginLeft: "auto" }}>
-              {!isEmpty(account) && (
+              {hideCreate === false && !isEmpty(account) && (
                 <Button
                   type="primary"
                   onClick={() => navigate(`/${pathPrefix}/create`)}
@@ -100,7 +105,7 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
             </div>
           </FlexCenter>
         }
-        footer={<Pagination defaultCurrent={page} onChange={updatePage} total={total} />}
+        footer={hideFooter === false && <Pagination defaultCurrent={page} onChange={updatePage} total={total} />}
         bordered
         dataSource={boardList}
         renderItem={(item: any) => {

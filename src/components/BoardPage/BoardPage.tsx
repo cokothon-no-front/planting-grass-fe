@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import accountState from '@/state/account';
 import isEmpty from '@/utils/isEmpty';
-import { useTimer } from 'react-timer-hook';
 import { BoardPageWrapper } from './BoardPageStyles';
 import { ActionState } from './reducer/BoardReducer';
 

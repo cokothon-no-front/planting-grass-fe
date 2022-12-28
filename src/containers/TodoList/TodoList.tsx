@@ -3,6 +3,7 @@ import DefaultLayout from "@/components/DefaultLayout";
 import BoardPage from "@/components/BoardPage";
 import TodoCheck from "./TodoCheck";
 import FlexCenter from '@/components/FlexCenter';
+import Friends from "@/components/Friends";
 
 interface IBoardPageProps {
 }
@@ -12,6 +13,9 @@ const TodoList: FunctionComponent<IBoardPageProps> = (props) => {
   return (
     <DefaultLayout>
       <FlexCenter>
+        <Friends
+          style={{ marginRight: 10, height: 415 }}
+        />
         <BoardPage
           prefix={"task"}
           title="태스크 목록"

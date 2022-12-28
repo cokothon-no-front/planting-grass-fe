@@ -24,30 +24,30 @@ const menuStyle = {
   display: 'flex'
 }
 
-const defaultMenus = Object.keys(routerMeta).reduce((prev: any[], componentKey: string) => {
+const nextRouter = (prev: any[], next: any, componentKey: string) => {
+  const { length, ...rest } = next
+  if (length === 1) {
+    return [...prev, { componentKey, ...rest }]
+  } else {
+    return prev
+  }
+}
+
+const defaultMenus: any[] = Object.keys(routerMeta).reduce((prev: any[], componentKey: string) => {
   const propsArr: any = assignRouteArrayProps(routerMeta[componentKey])
-  const { path } = assignRouteArrayProps(routerMeta[componentKey])
+  const { hide, path, ...rest } = propsArr
 
   const getPath = (path: string) => (path.match(/\//gi) || []).length
 
-  const pathWIthSlashLengthArr: any | any[] = Array.isArray(propsArr) ? propsArr.map(({ path }) => ({ path, length: getPath(path) })) : ({ path, length: getPath(path) })
+  const pathWIthSlashLengthArr: any | any[] = Array.isArray(propsArr) ? propsArr.map(({ path }) => ({ path, ...rest, length: getPath(path) })) : ({ path, ...rest, length: getPath(path) })
 
-  if (Array.isArray(pathWIthSlashLengthArr)) {
-    const assignPathData = pathWIthSlashLengthArr.reduce((prevArr, { path, length }) => {
-      if (length === 1) {
-        return [...prevArr, { componentKey, path }]
-      } else {
-        return prevArr
-      }
-    }, [])
+  if (hide) {
+    return prev
+  } else if (Array.isArray(pathWIthSlashLengthArr)) {
+    const assignPathData = pathWIthSlashLengthArr.reduce((prevArr, next) => nextRouter(prevArr, next, componentKey), [])
     return [...prev, ...assignPathData]
   } else {
-    const { path, length } = pathWIthSlashLengthArr
-    if (length === 1) {
-      return [...prev, { componentKey, path }]
-    } else {
-      return prev
-    }
+    return nextRouter(prev, pathWIthSlashLengthArr, componentKey)
   }
 }, [])
 

@@ -11,16 +11,25 @@ import { isEmpty } from "@/utils";
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
 interface IDetailBoardProps {
+  prefix?: string
 }
 
 const { confirm } = Modal;
 
 const DetailBoard: FunctionComponent<IDetailBoardProps> = (props) => {
+  const { prefix } = props
   const { state  } = useContext(BoardContext)
-  const { prefix } = state
 
   const navigate = useNavigate();
   const account = useRecoilValue(accountState)
+
+  const assignPrefix = useMemo<string>(() => {
+    if (prefix !== undefined) {
+      return `${prefix}_`;
+    } else {
+      return "";
+    }
+  }, [prefix]);
 
   const savedAccount: any = useMemo(() => {
     if (isEmpty(account)) {
@@ -35,14 +44,14 @@ const DetailBoard: FunctionComponent<IDetailBoardProps> = (props) => {
   const [commentList, setCommentList] = useState<UserSave[]>([]);
 
   const query = useMemo(() => {
-    const query = `${prefix}board:${id}:`
+    const query = `${assignPrefix}board:${id}:`
     return query
-  }, [prefix, id])
+  }, [assignPrefix, id])
 
   useEffect(() => {
     refreshAll()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prefix, id]);
+  }, [assignPrefix, id]);
 
   const refreshComments = useCallback(
     () => {

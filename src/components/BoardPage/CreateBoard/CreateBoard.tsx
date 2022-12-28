@@ -5,7 +5,7 @@ import { userSave } from "@/api";
 import { useNavigate } from "react-router";
 
 interface ICreateBoardProps {
-	prefix?: string;
+  prefix?: string;
 }
 
 const offset: any = 4
@@ -53,28 +53,28 @@ const CreateBoard: FunctionComponent<ICreateBoardProps> = (props) => {
   }, [assignPrefix, navigate])
 
   return (
-		<Form
-			{...layout}
-			name="nest-messages"
-			onFinish={onFinish}
-		>
-			<Form.Item name={"title"} label="제목" rules={[{ required: true }]}>
-				<Input />
-			</Form.Item>
-			<Form.Item wrapperCol={{ ...layout.wrapperCol, offset }}>
-				<Form.Item name="private" noStyle valuePropName="checked">
-					<Checkbox>비밀글</Checkbox>
-				</Form.Item>
-			</Form.Item>
-			<Form.Item name={'contents'} label="컨텐츠">
-				<Input.TextArea />
-			</Form.Item>
-			<Form.Item wrapperCol={{ ...layout.wrapperCol, offset }}>
-				<Button type="primary" htmlType="submit">
-					저장
-				</Button>
-			</Form.Item>
-		</Form>
+    <Form
+      {...layout}
+      name="nest-messages"
+      onFinish={onFinish}
+    >
+      <Form.Item name={"title"} label="제목" rules={[{ required: true }]}>
+        <Input />
+      </Form.Item>
+      <Form.Item wrapperCol={{ ...layout.wrapperCol, offset }}>
+        <Form.Item name="private" noStyle valuePropName="checked">
+          <Checkbox>비밀글</Checkbox>
+        </Form.Item>
+      </Form.Item>
+      <Form.Item name={'contents'} label="컨텐츠">
+        <Input.TextArea />
+      </Form.Item>
+      <Form.Item wrapperCol={{ ...layout.wrapperCol, offset }}>
+        <Button type="primary" htmlType="submit">
+          저장
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 

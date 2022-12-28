@@ -15,6 +15,18 @@ export type RouterMetaTypes = { [key: string] : RouteMetaType | RouteMetaType[] 
 const routerMeta: RouterMetaTypes = {
   Home: { path: '/' },
   About: ['/about', '/test'],
+  TodoList: {
+    title: '태스크 관리',
+    path: '/task'
+  },
+  TaskCreate: {
+    path: '/task/create',
+    hide: true
+  },
+  TaskDetail: {
+    path: '/task/:id',
+    hide: true
+  },
   Board: {
     title: '게시판',
     path: '/board'

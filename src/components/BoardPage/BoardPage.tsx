@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext, useEffect } from 'react';
+import React, { FunctionComponent, useContext, useEffect, useMemo } from 'react';
 import { EditOutlined } from '@ant-design/icons';
 import { PageableData, UserSave } from '@gongdongho12/npm-usersave-api/dist/meta';
 import { Button, List, Pagination } from 'antd';
@@ -14,12 +14,25 @@ import { BoardPageWrapper } from './BoardPageStyles';
 import { ActionState } from './reducer/BoardReducer';
 
 interface IBoardPageProps {
+  prefix?: string
 }
 
 const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
+  const { prefix } = props
+
+  const assignPrefix = useMemo<string>(() => {
+    if (prefix !== undefined) {
+      return `${prefix}_`;
+    } else {
+      return "";
+    }
+  }, [prefix]);
+
+  const pathPrefix = prefix || 'board'
+
   const { state, dispatch } = useContext(BoardContext);
 
-  const { prefix = "", page = 1, boardList = [], total = 10 } = state;
+  const { page = 1, boardList = [], total = 10 } = state;
 
   const account = useRecoilValue(accountState);
 
@@ -27,7 +40,7 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
 
   useEffect(() => {
     userSave
-      .getSavePageableQuery(`${prefix}title`, {
+      .getSavePageableQuery(`${assignPrefix}title`, {
         size: 10,
         page: 0,
         sort: "createdDate,desc",
@@ -51,7 +64,7 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
         });
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prefix]);
+  }, [assignPrefix]);
 
   const updatePage = (page: number) => {
     dispatch({
@@ -68,12 +81,12 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
       <List
         header={
           <FlexCenter>
-            <b>게시판</b>
+            <b>태스크</b>
             <div style={{ marginLeft: "auto" }}>
               {!isEmpty(account) && (
                 <Button
                   type="primary"
-                  onClick={() => navigate("/board/create")}
+                  onClick={() => navigate(`/${pathPrefix}/create`)}
                   icon={<EditOutlined />}
                 >
                   글쓰기
@@ -88,7 +101,7 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
         renderItem={(item: any) => {
           const { id, dataKey, data, userId } = item;
           return (
-            <List.Item key={id} onClick={() => navigate(`/board/${id}`)}>
+            <List.Item key={id} onClick={() => navigate(`/${pathPrefix}/${id}`)}>
               [{dataKey}] {data} [작성자: {userId}]
             </List.Item>
           );

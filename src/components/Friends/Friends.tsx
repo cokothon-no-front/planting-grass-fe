@@ -43,7 +43,6 @@ const Friends: React.FunctionComponent<IFriendsProps> = (props) => {
         page: 0,
         sort: "createdDate,desc",
       }).then(({ data }: any) => {
-        console.log('getFriends data', data)
         dispatch({
           type: ActionState.SET,
           value: {

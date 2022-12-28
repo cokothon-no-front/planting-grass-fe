@@ -87,7 +87,7 @@ const DefaultLayout: FunctionComponent<IDefaultLayoutProps> = (props) => {
 
   return (
     <Layout style={defaultStyle as any}>
-      <Header className="header" style={{ display: "flex" }}>
+      {/* <Header className="header" style={{ display: "flex" }}>
         <div className="logo" style={{
           color: "white", width: 100, cursor: 'pointer'
         }}>
@@ -111,7 +111,7 @@ const DefaultLayout: FunctionComponent<IDefaultLayoutProps> = (props) => {
             </PopOver>
           </div>
         </Menu>
-      </Header>
+      </Header> */}
       <Layout style={{ backgroundColor: "#FFF0DA", backgroundImage: `url(${background})`, height: '100%', backgroundRepeat: 'no-repeat', backgroundPosition: 'bottom', backgroundSize: 'contain' }}>
         <div style={{ padding: "10px 20px", height: '100%', ...style }}>
           <Title style={{ marginTop: 50, marginBottom: 40 }} />

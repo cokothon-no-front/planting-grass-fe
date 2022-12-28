@@ -79,10 +79,10 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
   }, [assignPrefix, defaultSize, dispatch, filter])
   
 
-  // useEffect(() => {
-  //   refreshList(page)
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [page, refreshList, assignPrefix]);
+  useEffect(() => {
+    refreshList(page)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   
   useEffect(() => {
@@ -94,7 +94,7 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
       return () => clearInterval(interval);
     }
     return undefined
-  }, [page, refreshList, repeat]);
+  }, [repeat]);
 
   const updatePage = (page: number) => {
     dispatch({

@@ -28,7 +28,6 @@ export const reducer = (state: BoardInterface, action: ActionInterface) => {
       console.log("assignValue", assignValue)
       return assignValue
     case ActionState.SET:
-      console.log('reducer SET', key, data)
       return { ...state, [key]: data };
     case ActionState.DEL:
       return { ...state, [key]: undefined }

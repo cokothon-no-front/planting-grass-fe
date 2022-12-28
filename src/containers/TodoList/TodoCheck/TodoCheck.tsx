@@ -21,30 +21,32 @@ const TodoCheck: FunctionComponent<ITodoCheckProps> = (props) => {
     const { checked } = e.target
     console.log(`checked = ${checked}`)
     setCheckComplete(checked)
-    userSave.editUserSave(id, {
-      id,
-      userId,
-      data: JSON.stringify({ title, check: checked }),
-      private: true,
-      ...rest
-    })
-      .then((res) => {
-        console.log('complete', res.data)
-        return userSave.addUserSave({
-          dataKey: "log_title",
-          data: `${userId}님이 ${title} 을(를) 완료했습니다!`,
-          private: false,
+    if (checked) {
+      userSave.editUserSave(id, {
+        id,
+        userId,
+        data: JSON.stringify({ title, check: checked }),
+        private: true,
+        ...rest
+      })
+        .then((res) => {
+          console.log('complete', res.data)
+          return userSave.addUserSave({
+            dataKey: "log_title",
+            data: `${userId}님이 ${title} 을(를) 완료했습니다!`,
+            private: false,
+          })
         })
-      })
-      .then(() => {
-        navigate('/task')
-      })
+        .then(() => {
+          navigate('/task')
+        })
+    }
   }, [id, navigate, rest, title, userId]);
 
   return <Checkbox onChange={onChange} onClick={(e) => {
     e.preventDefault()
     e.stopPropagation()
-  }} defaultChecked={check}><span style={checked ? { textDecoration: 'line-through', color: '#cccccc', fontSize: 14 } : { fontSize: 20 }}>{title}</span></Checkbox>;
+  }} defaultChecked={check}><span style={checked ? { textDecoration: 'line-through', color: '#cccccc', fontSize: 14 } : { fontSize: 14 }}>{title}</span></Checkbox>;
 };
 
 export default TodoCheck;

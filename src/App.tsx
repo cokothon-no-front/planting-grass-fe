@@ -7,15 +7,18 @@ import {
   useRecoilValue,
 } from "recoil";
 import langState, { messages } from "@/state/lang";
+import BoardContextWrapper from "@/components/BoardPage/BoardContextWrapper";
 
 const App: FunctionComponent<any> = () => {
   const lang = useRecoilValue(langState);
 
   return (
     <IntlProvider locale={lang} messages={messages[lang]}>
-      <Router>
-        <CommonRouter />
-      </Router>
+      <BoardContextWrapper>
+        <Router>
+          <CommonRouter />
+        </Router>
+      </BoardContextWrapper>
     </IntlProvider>
   );
 };

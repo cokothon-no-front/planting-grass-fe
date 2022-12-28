@@ -12,7 +12,6 @@
     "plugin:react/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:react/recommended",
-    "plugin:jsx-a11y/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:@typescript-eslint/recommended",
@@ -82,6 +81,8 @@
     "no-param-reassign": "off",
     "no-prototype-builtins": "off",
     "prefer-template": "off",
-    "array-callback-return": "off"
+    "array-callback-return": "off",
+    "object-curly-newline": "off",
+    "camelcase": "off"
   }
 }

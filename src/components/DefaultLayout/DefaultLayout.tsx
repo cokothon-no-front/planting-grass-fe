@@ -1,11 +1,15 @@
 import React, { FunctionComponent, useEffect, useMemo } from "react";
 import { Layout, Menu, Breadcrumb } from "antd";
+import PopOver from "@/components/PopOver";
+import Account from "@/components/Account";
 import { useIntl } from "react-intl";
 import { routerMeta } from '@/meta';
+import accountState from "@/state/account";
+import { useRecoilValue } from "recoil";
 
 import { Link, useLocation } from "react-router-dom";
-import LanguageSelector from "@/components/LanguageSelector";
-import { assignRouteArrayProps } from "@/utils";
+import { assignRouteArrayProps, isEmpty } from "@/utils";
+import { UserOutlined } from '@ant-design/icons';
 
 const { Header, Content } = Layout;
 
@@ -51,6 +55,24 @@ const DefaultLayout: FunctionComponent<IDefaultLayoutProps> = (props) => {
   const { children } = props;
   const { formatMessage: fm } = useIntl();
   const location = useLocation();
+  const account = useRecoilValue(accountState)
+
+  const savedAccount: any = useMemo(() => {
+    if (isEmpty(account)) {
+      return undefined
+    }
+    return account
+  }, [account])
+
+  const assignMenus = useMemo(() => defaultMenus.filter(({ account, path }) => {
+    if (account) {
+      return !!savedAccount
+    } else if (account === undefined) {
+      return true
+    } else {
+      return !savedAccount
+    }
+  }), [savedAccount])
 
   useEffect(() => {
     console.log('pathname', location.pathname)
@@ -72,13 +94,22 @@ const DefaultLayout: FunctionComponent<IDefaultLayoutProps> = (props) => {
           {fm({ id: "title" })}
         </div>
         <Menu theme="dark" mode="horizontal" style={menuStyle} activeKey={location.pathname} selectable={false}>
-          {defaultMenus.map(({ componentKey, path }) => <Menu.Item key={path}>
+          {assignMenus.map(({ componentKey, path }) => <Menu.Item key={path}>
             <Link to={path}>{componentKey} ({path})</Link>
           </Menu.Item>)}
-
-          <Menu.Item key="language-selector" disabled style={{ opacity: 1, marginLeft: 'auto' }}>
-            <LanguageSelector />
-          </Menu.Item>
+          <div style={{ opacity: 1, marginLeft: "auto", order: assignMenus.length + 1 }}>
+            <PopOver
+              buttonProps={
+                {
+                  placement: "bottomLeft",
+                  title: "Account",
+                  content: <Account />,
+                } as any
+              }
+            >
+              <UserOutlined />
+            </PopOver>
+          </div>
         </Menu>
       </Header>
       <Layout>

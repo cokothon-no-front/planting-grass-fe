@@ -14,8 +14,8 @@ interface ICreateBoardProps {
 
 const offset: any = 4
 const layout = {
-  labelCol: { span: offset },
-  wrapperCol: { span: 20 },
+  // labelCol: { span: offset },
+  wrapperCol: { span: 24 },
 };
 
 const CreateBoard: FunctionComponent<ICreateBoardProps> = (props) => {
@@ -50,7 +50,6 @@ const CreateBoard: FunctionComponent<ICreateBoardProps> = (props) => {
       })
     }).then((data: UserSave) => {
       console.log('contents data', data)
-      const { id } = data
       message.success("성공적으로 추가되었습니다.")
       navigate(-1)
     })
@@ -62,19 +61,19 @@ const CreateBoard: FunctionComponent<ICreateBoardProps> = (props) => {
       name="nest-messages"
       onFinish={onFinish}
     >
-      <Form.Item name={"title"} label={title} rules={[{ required: true }]}>
-        <Input />
+      <Form.Item name={"title"} rules={[{ required: true }]}>
+        <Input placeholder={title} />
       </Form.Item>
       {alwaysPrivate !== true && <Form.Item wrapperCol={{ ...layout.wrapperCol, offset }}>
         <Form.Item name="private" noStyle valuePropName="checked">
           <Checkbox>비밀글</Checkbox>
         </Form.Item>
       </Form.Item>}
-      <Form.Item name={'contents'} label={contentsText}>
-        <Input.TextArea />
+      <Form.Item name={'contents'}>
+        <Input.TextArea placeholder={contentsText} />
       </Form.Item>
-      <Form.Item wrapperCol={{ ...layout.wrapperCol, offset }}>
-        <Button type="primary" htmlType="submit">
+      <Form.Item wrapperCol={{ ...layout.wrapperCol }}>
+        <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
           저장
         </Button>
       </Form.Item>

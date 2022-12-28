@@ -16,7 +16,8 @@ import Title from "@/components/Title";
 const { Header } = Layout;
 
 interface IDefaultLayoutProps {
-  style?: any
+  style?: any,
+  hideTitle?: boolean
 }
 
 const defaultStyle = {
@@ -59,7 +60,7 @@ const defaultMenus: any[] = Object.keys(routerMeta).reduce((prev: any[], compone
 }, [])
 
 const DefaultLayout: FunctionComponent<IDefaultLayoutProps> = (props) => {
-  const { children, style = {} } = props;
+  const { children, style = {}, hideTitle = false } = props;
   const { formatMessage: fm } = useIntl();
   const location = useLocation();
   const account = useRecoilValue(accountState)
@@ -114,7 +115,7 @@ const DefaultLayout: FunctionComponent<IDefaultLayoutProps> = (props) => {
       </Header> */}
       <Layout style={{ backgroundColor: "#FFF0DA", backgroundImage: `url(${background})`, height: '100%', backgroundRepeat: 'no-repeat', backgroundPosition: 'bottom', backgroundSize: 'contain' }}>
         <div style={{ padding: "10px 20px", height: '100%', ...style }}>
-          <Title style={{ marginTop: 50, marginBottom: 40 }} />
+          {!hideTitle && <Title style={{ marginTop: 50, marginBottom: 40 }} />}
           {children}
         </div>
       </Layout>

@@ -128,7 +128,7 @@ const Friends: React.FunctionComponent<IFriendsProps> = (props) => {
               <Button icon={<DeleteOutlined />} style={{ marginLeft: 'auto' }} onClick={() => deleteFriends(id)} danger >친구</Button>
             </FlexCenter>
           }>
-            <Avatar size={'large'} style={{ marginTop: 10, backgroundColor: '#1890ff' }}>
+            <Avatar size={'large'} style={{ marginTop: 10, backgroundColor: '#53a151' }}>
               {email.substr(0, 5)}
             </Avatar>
           </Popover>

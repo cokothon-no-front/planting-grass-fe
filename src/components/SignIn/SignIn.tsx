@@ -39,41 +39,41 @@ const SignIn: FunctionComponent<ISignInProps> = (props) => {
   return (
     <Form
       name="basic"
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
+      // labelCol={{ span: 8 }}
+      wrapperCol={{ span: 24 }}
       initialValues={{ remember: true }}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
       <Form.Item
-        label="E-mail"
+        // label="E-mail"
         name="email"
         rules={[{ required: true, message: "Please input your email!" }]}
       >
-        <Input />
+        <Input placeholder="email" />
       </Form.Item>
 
       <Form.Item
-        label="Password"
+        // label="Password"
         name="password"
         rules={[{ required: true, message: "Please input your password!" }]}
       >
-        <Input.Password />
+        <Input.Password placeholder="password" />
       </Form.Item>
 
-      <Form.Item
+      {/* <Form.Item
         name="remember"
         valuePropName="checked"
         wrapperCol={{ offset: 8, span: 16 }}
       >
         <Checkbox>Remember me</Checkbox>
-      </Form.Item>
+      </Form.Item> */}
 
       <Form.Item wrapperCol={{ span: 24 }}>
         <FlexCenter>
           <Button type="primary" htmlType="submit">
-            Login
+            login
           </Button>
           <Button
             type="default"
@@ -82,7 +82,7 @@ const SignIn: FunctionComponent<ISignInProps> = (props) => {
               navigate("/register");
             }}
           >
-            Register
+            register
           </Button>
         </FlexCenter>
       </Form.Item>

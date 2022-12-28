@@ -24,10 +24,11 @@ interface IBoardPageProps {
   hideFooter?: boolean;
   clickable?: boolean;
   repeat?: boolean;
+  filter?: (v: any) => boolean
 }
 
 const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
-  const { title = "게시판", prefix, createText = "글쓰기", assignTitle, defaultSize = 10, hideCreate = false, hideFooter = false, clickable = true, listHeight, style = {}, repeat = false } = props
+  const { title = "게시판", prefix, createText = "글쓰기", assignTitle, defaultSize = 10, hideCreate = false, hideFooter = false, clickable = true, listHeight, style = {}, repeat = false, filter } = props
 
   const assignPrefix = useMemo<string>(() => {
     if (prefix !== undefined) {
@@ -59,11 +60,12 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
         sort: "createdDate,desc",
       })
       .then(({ total, data }: PageableData<UserSave>) => {
+        const filterdData = filter !== undefined ? data.filter(v => filter(v)) : data
         dispatch({
           type: ActionState.SET,
           value: {
             key: `${assignPrefix}boardList`,
-            data,
+            data: filterdData,
           }
         });
         dispatch({
@@ -74,7 +76,7 @@ const BoardPage: FunctionComponent<IBoardPageProps> = (props) => {
           }
         });
       });
-  }, [assignPrefix, defaultSize, dispatch])
+  }, [assignPrefix, defaultSize, dispatch, filter])
   
 
   // useEffect(() => {

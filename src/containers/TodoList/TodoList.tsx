@@ -46,6 +46,9 @@ const TodoList: FunctionComponent<IBoardPageProps> = (props) => {
               {data}
             </div>
           }}
+          // filter={(v: any) => {
+          //   v.
+          // }}
         />
       </FlexCenter>
     </DefaultLayout>

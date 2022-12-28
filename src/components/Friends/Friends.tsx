@@ -58,7 +58,7 @@ const Friends: React.FunctionComponent<IFriendsProps> = (props) => {
   useEffect(() => {
     getFriends()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [friends])
+  }, [])
   
   const logout = useCallback(() => {
     localStorage.removeItem('jwt')
@@ -84,7 +84,7 @@ const Friends: React.FunctionComponent<IFriendsProps> = (props) => {
           const appendFrineds = [...friends, { ...userData, id: data.id }]
           console.log('appendFrineds', appendFrineds)
           dispatch({
-            type: ActionState.SET_DATA,
+            type: ActionState.SET,
             value: {
               key: 'friends',
               data: appendFrineds,
@@ -103,7 +103,7 @@ const Friends: React.FunctionComponent<IFriendsProps> = (props) => {
         type: ActionState.SET,
         value: {
           key: 'friends',
-          data: friends.filter(v => v.id === id),
+          data: friends.filter(v => v.id !== id),
         }
       })
     })

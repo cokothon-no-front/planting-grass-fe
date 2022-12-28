@@ -26,8 +26,21 @@ const register = (account: Account) => axiosInstance
     return data;
   });
 
+const getUserList = (email: string) => axiosInstance
+  .get("/user/list", {
+    params: {
+      email_query: `%${email}%`
+    }
+  })
+  .then((res: any) => {
+    const { data } = res;
+    console.log("getUserList data", data);
+    return data;
+  });
+
 export default {
   login,
   register,
-  getAccount
+  getAccount,
+  getUserList
 };

@@ -1,5 +1,13 @@
 # 잔디심기 Front-End
 
+![](https://img.shields.io/github/v/release/cokothon-no-front/planting-grass-fe) ![](https://img.shields.io/badge/license-MIT-green) [![react](./images/react.svg)](./images/react.svg) [![node](./images/node.svg)](./images/node.svg) [![typescript](./images/typescript.svg)](./images/typescript.svg)
+
+## 코코톤 2022 1조 프론트엔드
+
+내 청춘을 더 푸르게, 잔디 심기
+
+![screenshot](./images/frame_%EC%9E%94%EB%94%94%EC%8B%AC%EA%B8%B0.png)
+
 ## React Boilerplate
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and [craco](https://github.com/gsoft-inc/craco).
